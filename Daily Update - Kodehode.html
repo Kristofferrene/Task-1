@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Daily Updates Kodehode</title>
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-image: url('img/Japanese BG3.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    /* Flashing Title Animation */
+    @keyframes flashTitle {
+        0% {
+            opacity: 0;
+            transform: scale(0);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.2);
+            background-color: #ffd900;
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+            background-color: transparent;
+        }
+    }
+
+    /* Title Container */
+    .title-container {
+        padding: 20px;
+        animation: flashTitle 2s ease forwards;
+        margin-top: 20px;
+        border: 4px solid transparent;
+    }
+
+    h1 {
+        color: #ff0000e7;
+        font-size: 3em;
+        margin: 0;
+        text-shadow: 
+            2px 2px 0 #ffd900,  
+            -2px 2px 0 #ffd900, 
+            2px -2px 0 #ffd900, 
+            -2px -2px 0 #ffd900;
+    }
+
+    h3 {
+        color: #000000;
+        font-size: 1em;
+        margin: 20px;
+        display: none;
+    }
+
+    h2, h4, h5 {
+        font-size: 1.5em;
+        color: #ff0000e7;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    /* Styling for interactive D */
+    #D-button {
+        position: relative;
+        display: inline-block;
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.2);
+        color: #ff0000;
+        border: 2px solid #ffd900;
+        transition: 0.5s;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    #D-button:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    #D-button::before, #D-button::after {
+        content: "";
+        position: absolute;
+        border: 2px solid #ffd900;
+        width: 0;
+        height: 0;
+        transition: 0.5s;
+    }
+
+    #D-button::before {
+        top: 0; left: 0;
+        height: 100%;
+    }
+
+    #D-button::after {
+        right: 0; bottom: 0;
+        width: 100%;
+    }
+
+    #D-button:hover::before {
+        width: 100%;
+    }
+
+    #D-button:hover::after {
+        height: 100%;
+    }
+
+    /* Box styling for buttons */
+    .box {
+        position: relative;
+        display: inline-block;
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.2);
+        color: #ffd900;
+        border: 2px solid #ffd900;
+        transition: 0.5s;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .box:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .box::before, .box::after {
+        content: "";
+        position: absolute;
+        border: 2px solid #ffd900;
+        width: 0;
+        height: 0;
+        transition: 0.5s;
+    }
+
+    .box::before {
+        top: 0; left: 0;
+        height: 100%;
+    }
+
+    .box::after {
+        right: 0; bottom: 0;
+        width: 100%;
+    }
+
+    .box:hover::before {
+        width: 100%;
+    }
+
+    .box:hover::after {
+        height: 100%;
+    }
+
+    img {
+        margin: 10px;
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Tilted image styles with smooth transitions */
+    .tilt-left {
+        transform: rotate(-5deg);
+        transition: transform 0.3s ease;
+    }
+
+    .tilt-right {
+        transform: rotate(5deg);
+        transition: transform 0.3s ease;
+    }
+
+    /* Positioning of side images */
+    .side-images {
+        position: absolute;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: auto;
+    }
+
+    .left-side {
+        left: 5.25%;
+    }
+
+    .right-side {
+        right: 5.25%;
+    }
+
+    .side-images img {
+        width: 205px;
+        height: auto;
+        margin: 15px 0;
+    }
+
+    /* Do Not Press Button */
+    .do-not-press {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px;
+        background-color: rgba(255, 0, 0, 0.8);
+        color: white;
+        border: 2px solid #ffd900;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .do-not-press:hover {
+        background-color: rgba(255, 0, 0, 1);
+    }
+
+    .icon {
+        width: 20px;
+        height: auto;
+        margin-right: 5px;
+    }
+
+    /* Popup Styles */
+    .popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 999;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popup-content {
+        position: relative;
+        width: 400px;
+        height: 300px;
+        background-color: white;
+        border-radius: 10px;
+        text-align: center;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .popup-content img {
+        width: 100px;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .popup-content h2 {
+        color: red;
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+
+    /* Close button */
+    .close-popup {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: transparent;
+        border: none;
+        font-size: 1.5em;
+        cursor: pointer;
+        color: red;
+    }
+
+    /* Styles for the white box containing the image */
+    .white-box {
+        background-color: white;
+        padding: 20px;
+        margin: 20px auto;
+        width: fit-content;
+        border: 1px solid black;
+        text-align: center;
+    }
+
+    .white-box h2 {
+        color: red;
+        margin-bottom: 20px;
+    }
+
+    .white-box a {
+        display: inline-block;
+    }
+
+    .white-box img {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+
+<script>
+    function togglePopup() {
+        const popupOverlay = document.getElementById('popup-overlay');
+        popupOverlay.style.display = popupOverlay.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    // Action when pressing the red button
+    function pressRedButton() {
+        alert('You pressed the forbidden button!');  // Example action: alert
+        // You can also use window.location.href to redirect to another page:
+        // window.location.href = 'https://example.com';
+    }
+
+    function toggleQuote() {
+        const quoteElement = document.getElementById('quote');
+        if (quoteElement.style.display === 'none' || quoteElement.style.display === '') {
+            quoteElement.style.display = 'block';
+        } else {
+            quoteElement.style.display = 'none';
+        }
+    }
+
+    function redirectToYouTube() {
+        window.open("https://www.youtube.com/watch?v=YOUR_VIDEO_ID&autoplay=1", "_blank"); // Replace YOUR_VIDEO_ID with actual video ID
+    }
+</script>
+
+</head>
+
+<body>
+
+<!-- Side images, three tilted on each side with swapped tilts -->
+<div class="side-images left-side">
+    <img src="img/Sides/Meme1.png" alt="Left Image 1" class="tilt-right">
+    <img src="img/Sides/Meme5.png" alt="Left Image 2" class="tilt-left">
+    <img src="img/Sides/Meme3.png" alt="Left Image 3" class="tilt-right">
+</div>
+
+<div class="side-images right-side">
+    <img src="img/Sides/Meme4.png" alt="Right Image 1" class="tilt-left">
+    <img src="img/Sides/Meme2.png" alt="Right Image 2" class="tilt-right">
+    <img src="img/Sides/Meme6.png" alt="Right Image 3" class="tilt-left">
+</div>
+
+<!-- Centered content with interactive D -->
+<div class="title-container">
+    <h1><span id="D-button" onclick="togglePopup()">D</span>aily Updates Kodehode</h1>
+</div>
+
+<!-- Popup -->
+<div id="popup-overlay" class="popup-overlay" onclick="togglePopup()">
+    <div class="popup-content" onclick="event.stopPropagation()">
+        <button class="close-popup" onclick="togglePopup()">×</button>
+        <h2>DO NOT PRESS!</h2>
+        <img src="img/red-finger-button.png" alt="Red Finger Button Icon" onclick="pressRedButton()">
+    </div>
+</div>
+
+<!-- Do Not Press Button with Icon -->
+<h3>
+    <span class="box do-not-press" onclick="redirectToYouTube()">
+        <img src="img/finger-icon.png" alt="Finger Icon" class="icon">
+        Do Not Press
+    </span>
+</h3>
+
+<h2>
+    <span class="box" onclick="toggleQuote()">Quote OTD</span>
+</h2>
+<h3 id="quote">The blood was never once beautiful, it was just red.<br>We make poetry to disguise the evident.</h3>
+
+<!-- Original content with song and based content -->
+<h4>
+    <a class="box" href="https://open.spotify.com/album/6Yw4204wbgmpsGTzjXBhYD" target="_blank">Song OTD<br></a>
+</h4>
+<img src="./img/1a0d4a52a80eafda60bd6f865eecd459.png" alt="Big Dawgs - Hanumankind" width="280">
+
+<h5>
+    <a class="box" href="https://www.youtube.com/watch?v=bQIfqWIws_0" target="_blank">Based Content<br></a>
+</h5>
+<img src="img/Varlamore NPC.png" alt="Varlamore NPC" width="280">
+
+<!-- White box containing the "DO NOT PRESS!" and red button link with red finger pressing it -->
+<div class="white-box">
+    <h2>DO NOT PRESS!</h2>
+    <a href="anotherPage.html" class="red-button-link">
+        <img src="img/red-finger-button.png" alt="Red Finger pressing Red Button">
+    </a>
+</div>
+
+</body>
+</html>
